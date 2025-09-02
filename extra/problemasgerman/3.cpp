@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+template <typename T> using minheap = priority_queue<T, vector<T>, greater<T>>;
+using lli = long long int;
+using vi = vector<int>;
+using vlli = vector<lli>;
+using vvi = vector<vi>;
+using vvlli = vector<vlli>;
+#define forn(i, a, b) for(lli i = a; i < b; i++)
+#define rof(i, a, b) for(lli i = a; i >= b; i--)
+#define nl '\n'
+int msb(long long int x) { return 63 - __builtin_clzll(x);}
+long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
+#define MOD 1000000007
+
+void solve(){
+    lli n; cin >> n;
+    vlli a(n);
+    forn(i, 0, n) cin >> a[i];
+    lli maxi = 0;
+    lli unos, ceros;
+    lli ans = 0;
+    lli expo = 1;
+    lli mult;
+    do
+    {
+        unos = 0;
+        ceros = 0;
+        maxi = 0;
+        forn(i, 0, n){
+            maxi = max(maxi, a[i]);
+            if(a[i]%2 == 1) unos++;
+            else ceros++;
+            a[i]/=2;
+        }
+        mult = (unos*ceros)%MOD;
+        ans = (ans + (mult*expo)%MOD)%MOD;
+        expo=(expo*2)%MOD;
+    } while (maxi > 0);
+
+    cout << (ans+MOD)%MOD << nl;
+    
+}
+
+ 
+int main(){
+    cin.tie(0)->sync_with_stdio(false);
+    solve();
+    return 0;
+}

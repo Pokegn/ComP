@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+template <typename T> using minheap = priority_queue<T, vector<T>, greater<T>>;
+using lli = long long int;
+using vi = vector<int>;
+using vlli = vector<lli>;
+using vvi = vector<vi>;
+using vvlli = vector<vlli>;
+#define forn(i, a, b) for(lli i = a; i < b; i++)
+#define rof(i, a, b) for(lli i = a; i >= b; i--)
+#define nl '\n'
+int msb(long long int x) { return 63 - __builtin_clzll(x);}
+long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
+
+void solve(){
+    lli n,x; cin >> n >> x;
+    vlli div;
+    forn(i, 1, x+1){
+        if(x%i==0) div.push_back(i);
+    }
+
+    vlli a(n);
+    vlli xd(2e5+1, 0);
+    lli ans = 1;
+    forn(i, 0, n) cin >> a[i];
+
+
+    forn(i, 0, n){
+        if(x%a[i]==0){
+            if(xd[a[i]] == ans){
+                ans++;
+                xd[x/a[i]] = ans;
+            }
+            else{
+                for(auto d: div){
+                    if(xd[d] == ans && d%a[i] == 0){
+                        xd[d/a[i]] = ans;
+                    }
+                }
+                xd[x/a[i]] = ans;
+                continue;
+            }
+        }
+    }
+    cout << ans << nl;
+}
+
+ 
+int main(){
+    cin.tie(0)->sync_with_stdio(false);
+    int t; cin >> t;
+    while(t--) solve();
+    return 0;
+}
