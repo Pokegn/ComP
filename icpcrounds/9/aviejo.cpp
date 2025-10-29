@@ -106,42 +106,66 @@ void solve() {
  
 	//cout << k1 << ' ' << k2 << ' ' << k3 << ' ' << l1 << ' ' << l2 << ' ' << l3 << '\n';
  
-	ll na,nb, denom; //numerador y denominador
-	nb = k1 * l3 - k3 * l1;
-	denom = k1 * l2 - k2 * l1;
-	na = -k2 * l3 + k3 * l2;
+	ll bn, bd, an, ad; //numerador y denominador
+	bn = k1 * l3 - k3 * l1;
+	bd = k1 * l2 - k2 * l1;
+	an = k2 * l3 - k3 * l2;
+	ad = k2 * l1 - k1 * l2;
+	ll na = an, da = ad, nb = bn, db = bd;
  
-	if(denom < 0){
-		denom*=-1;
-		na*=-1;
-		nb*=-1;
-	}
 	//cout << an << ' ' << ad << ' ' << bn << ' ' << bd << '\n';
     
-	if (denom!=0) {
-		if (na >= 0 && na <= denom && nb >= 0 && nb <= denom) { //mi denominador es da^2 o xdd^2
+	if (ad != 0 && bd != 0) {
+       // cout << "xd";
+	    //cout << na << ' ' << da << ' ' << nb << ' ' << db << '\n';
+		ll ga = __gcd(na, da);
+		ll gb = __gcd(nb, db);
+		na /= ga;
+		da /= ga;
+		nb /= gb;
+		db /= gb;
+		if (da < 0) {
+			na *= -1;
+			da *= -1;
+		}
+		if (db < 0) {
+			nb *= -1;
+			db *= -1;
+		}
+		ll xdd = da * db;
+		na *= db;
+		nb *= da;
+		da = xdd;
+		db = xdd;
+	    //cout << na << ' ' << da << ' ' << nb << ' ' << db << '\n';
+ 
+ 
+		if (na >= 0 && na <= da && nb >= 0 && nb <= db) { //mi denominador es da^2 o xdd^2
 			vector<ll> ansnum(3, 0);
-			ansnum[0] += x1 * na + x2 * (denom - na);
-			ansnum[0] -= p1 * nb + p2 * (denom - nb);
+			ansnum[0] += x1 * na + x2 * (da - na);
+			ansnum[0] -= p1 * nb + p2 * (db - nb);
 			//cout << x1*na+x2*(da-na) << ' ' << p1 * nb + p2 * (db - nb) << ' ';
 			ansnum[0] *= ansnum[0];
  
-			ansnum[1] += y1 * na + y2 * (denom - na);
-			ansnum[1] -= q1 * nb + q2 * (denom - nb);
+			ansnum[1] += y1 * na + y2 * (da - na);
+			ansnum[1] -= q1 * nb + q2 * (db - nb);
 		//	cout <<y1 * na + y2 * (da - na)<< ' ' << q1 * nb + q2 * (db - nb) << ' ';
 			ansnum[1] *= ansnum[1];
  
-			ansnum[2] += z1 * na + z2 * (denom - na);
-			ansnum[2] -= r1 * nb + r2 * (denom - nb);
+			ansnum[2] += z1 * na + z2 * (da - na);
+			ansnum[2] -= r1 * nb + r2 * (db - nb);
 			//cout << z1 * na + z2 * (da - na) << ' ' << r1 * nb + r2 * (db - nb) << ' ';
 			ansnum[2] *= ansnum[2];
  
             //cout << ansnum[0] << ' ' << ansnum[1] << ' ' << ansnum[2] << '\n';
 			ll ansb = ansnum[0] + ansnum[1] + ansnum[2];
-			ll di = __gcd(ansb, (denom*denom));
+			ll di = __gcd(ansb, (da * da));
 			//cout << ansb << ' ' << da*da << ' ' << di << '\n';
-			ll xdd = denom*denom;
+			xdd = da*da;
 			ansb /= di; xdd /= di;
+			if(xdd == 0){
+			    xdd = 1;
+			}
 			if(xdd < 0){
 			    xdd*=-1;
 			    ansb*=-1;
@@ -151,35 +175,36 @@ void solve() {
 			return;
 		}
 	}
-
-	vector<ll> dn(4);
-	vector<ll> dd(4);
-	pair<ll, ll> par;
-	par = distrecta(x1, y1, z1, p1, q1, r1, p2, q2, r2);
-	dn[0] = par.first;
-	dd[0] = par.second;
-	par = distrecta(x2, y2, z2, p1, q1, r1, p2, q2, r2);
-	dn[1] = par.first;
-	dd[1] = par.second;
-	par = distrecta(p1, q1, r1, x1,y1, z1, x2, y2, z2);
-	dn[2] = par.first;
-	dd[2] = par.second;
-	par = distrecta(p2, q2, r2, x1, y1, z1, x2, y2, z2);
-	dn[3] = par.first;
-	dd[3] = par.second;
-
-	par = menor(dn[0], dd[0], dn[1], dd[1]);
-	par = menor(par.first, par.second, dn[2], dd[2]);
-	par = menor(par.first, par.second, dn[3], dd[3]);
-	
-	ll g = __gcd(par.first, par.second);
-	par.first/=g; par.second/=g;
-	
-	if(par.second == 0) par.second = 1;
-	if(par.second<0){
-		par.first*=-1;
-		par.second*=-1;
-	}
+		vector<ll> dn(4);
+		vector<ll> dd(4);
+		pair<ll, ll> par;
+		par = distrecta(x1, y1, z1, p1, q1, r1, p2, q2, r2);
+		dn[0] = par.first;
+		dd[0] = par.second;
+		par = distrecta(x2, y2, z2, p1, q1, r1, p2, q2, r2);
+		dn[1] = par.first;
+		dd[1] = par.second;
+		par = distrecta(p1, q1, r1, x1,y1, z1, x2, y2, z2);
+		dn[2] = par.first;
+		dd[2] = par.second;
+		par = distrecta(p2, q2, r2, x1, y1, z1, x2, y2, z2);
+		dn[3] = par.first;
+		dd[3] = par.second;
+        for(int i=0; i<4; i++){
+            //cout << dn[i] << ' ' << dd[i] << '\n';
+        }
+		par = menor(dn[0], dd[0], dn[1], dd[1]);
+		par = menor(par.first, par.second, dn[2], dd[2]);
+		par = menor(par.first, par.second, dn[3], dd[3]);
+		
+		ll g = __gcd(par.first, par.second);
+		par.first/=g; par.second/=g;
+		
+		if(par.second == 0) par.second = 1;
+		if(par.second<0){
+		    par.first*=-1;
+		    par.second*=-1;
+		}
         
        // cout << "xd";
 		cout << par.first << ' ' << par.second << '\n';
