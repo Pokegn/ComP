@@ -73,7 +73,7 @@ void solve() {
             cout << "INVALID" << '\n';
             return;
         }
-        sa[i] = scorea;
+        sa[i] = scorea; //del 0 al i abiertas - cerradas
         si[i] = scorei;
     }
     if(scorei!=0 || scorea!=0){
@@ -81,9 +81,54 @@ void solve() {
         return;
     }
 
+    stack<ll> izq;
+    vector<ll> pareja(n);
+
+    for(int i=0; i<n; i++){
+        if(s[i] == 'a' || s[i] == 'i'){
+            izq.push(i);
+        }
+        else{
+            auto j = izq.top();
+            izq.pop();
+            pareja[i] = j;
+            pareja[j] = i;
+        }
+    }
+
     ll i = ind;
-    while(i>=0 && sa[i] + si[i]){
-        
+    while(i>=0){
+        if(i == 0){
+            s[i] = 'i';
+            break;
+        }
+        if(s[i] == 'a' && sa[i-1] > 0){
+            s[i] == 'e';
+            sa[i]-=2;
+            break;
+        }
+        if(s[i] == 'a'){
+            
+        }
+        if(s[i] == 'a'){
+            ll l = i;
+            ll r = pareja[i];
+            s[l] = 'i';
+            s[r] = 'o';
+            for(int j = l+1; j<r; j++){
+                if(j-l < r-j) s[i] = 'a';
+                else s[i] = 'e';
+            }
+            l = pareja[i]+1;
+            r = n;
+            for(int j = l+1; j<r; j++){
+                if(j-l < r-j) s[i] = 'a';
+                else s[i] = 'e';
+            }
+            cout << s << '\n';
+            return;
+        }
+        i--;
     }
 
 }
