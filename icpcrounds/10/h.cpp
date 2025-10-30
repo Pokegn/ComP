@@ -87,19 +87,23 @@ void solve() {
         }
         while(actual>obj){
             aa[1].push_back(aa[0][actual-1]);
-            aa[0][actual2-1] = -1;
+            aa[0][actual-1] = -1;
             actual2++;
             actual--;
         }
 
         for(int i=0; i<obj; i++){
             if(aa[0][i] != bb[0][i]){
+                // cout << i << endl;
+                // cout << aa[0][i] << ' ' << bb[0][i] << endl; 
                 cout << "N" << endl;
                 return;
             }
         }
+        //cout << 2 << endl;
         for(int i=0; i<actual+actual2-obj; i++){
             if(aa[1][i] != bb[1][i]){
+                //cout << aa[1][i] << ' ' << bb[1][i] << endl; 
                 cout << "N" << endl;
                 return;
             }

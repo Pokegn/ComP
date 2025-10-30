@@ -37,8 +37,8 @@ ll MOD = 998244353;
 
 void solve() {
     ll n; cin >> n;
-	vector<ll> t(n - 1);
-	for (int i = 0; i < n - 1; i++) cin >> t[i];
+	vector<ll> t(n);
+	for (int i = 0; i < n; i++) cin >> t[i];
 	sort(t.begin(), t.end());
 	if (n == 1 && t[0]==1) {
 		cout << "*" << '\n';
@@ -55,18 +55,20 @@ void solve() {
 	}
 
 	if (n == 2) {
-		ll posp = (ll) floor(sqrt(t[1]));
-		if (posp * posp == t[1]) {
+		ll posp = (ll) floor(sqrtl(t[1]));
+		if (posp * posp == t[1] || (posp+1)*(posp+1) == t[1]) {
 			cout << t[1] << ' ' << posp << endl;
+
 		}
 		else {
-			cout << posp * posp << ' ' << posp * posp << endl;
+			cout << t[1] * t[1] << ' ' << t[1] * t[1] << endl;
 		}
+        return;
 	}
 
     //N = t[n-1] o t[n-1]*t[1]
-    ll sq = (ll)floor(sqrt((double) t[1])); //checar si es potencia de p
-    if(sq*sq == t[1]){
+    ll sq = (ll)floor(sqrtl((double) t[1])); //checar si es potencia de p
+    if(sq*sq == t[1] || (sq+1)*(sq+1) == t[1]){
         cout << t[n-1] << ' ' << sq << endl;
         return;
     }
@@ -75,34 +77,67 @@ void solve() {
     for(int i=1; i<n; i++){
         ll temp = t[i];
         while(temp%p == 0) temp/=p;
-        if(temp!=0) ispot = false;
+        if(temp!=1) ispot = false;
     }
 
+    //cout << 2;
     if(ispot == true){
+        //return;
         for(int i=1; i<n; i++){
             if(t[i]!=t[i-1]*p){
-                cout << t[n-1] << ' ' << t[i] << endl;
+                cout << t[n-1] << ' ' << t[i-1]*p << endl;
                 return;
             }
         }
         cout << t[n-1]*p << ' ' << t[n-1]*p << endl;
+        return;
     } //ahora si, hay dos primos que lo dividen
 
+    if(n ==3){
+        if(t[n-1]%t[n-2] == 0){ //t[n-1] es n
+            cout << t[n-1] << ' ' << t[n-1]/t[n-2] << endl;
+        }
+        else{
+            cout << t[n-1]*t[n-2] << ' ' << t[n-1]*t[n-2] << endl;
+        }
+        return;
+    }
+
     //quiero saber si t[n-1] es n o n/t[1]
-    if(t[n-1] <= 1e18/t[1]+1){
-        ll maxpot = 1;
-        while()
+    bool flag = true;
+    for(int i=0; i<n; i++){
+        if(t[n-1]%t[i]!=0) flag = false; //false significa que quitamos a n
+    }
+    if(flag == false){
+        cout << t[n-1]*t[1] << ' ' << t[n-1]*t[1] << endl;
+        return;
     }
     //aqui ya se que es t[n-1]
+    //1 2 3 4 6 8 12 24
     
-    if(t[n-1] < t[1]*t[n-2]){
-
+    map<ll, ll> esta;
+    for(int i=0; i<n; i++){
+        esta[t[i]] = 1;
     }
-    else{
-
+    for(int i=0; i<n; i++){
+        if(esta[t[n-1]/t[i]]!=1){
+            cout << t[n-1] << ' ' << t[n-1]/t[i] << endl;
+            return;
+        }
     }
-
-
+    //cout << "Xd";
+    sq = (ll)floor(sqrtl((double) t[n-1]));
+    if(sq*sq == t[n-1]){
+        cout << t[n-1] << ' ' << sq << endl;
+        return;
+    }
+    if((sq+1)*(sq+1) == t[n-1]){
+        cout << t[n-1] << ' ' << sq+1 << endl;
+        return;
+    }
+    while(true){
+        t[n-1] = 0/0;
+    }
 }
 
 int main() {
@@ -115,4 +150,4 @@ int main() {
 	while (t--) {
 		solve();
 	}
-}
+} //1 2 3 4 6 12
