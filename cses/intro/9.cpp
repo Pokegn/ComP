@@ -13,15 +13,29 @@ using vvlli = vector<vlli>;
 #define pb push_back
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
+#define MOD 1000000007
+
+long long fexp(long long a, long long b, long long m) {
+    a %= m;
+    long long res = 1;
+    while (b > 0) {
+        if (b & 1)
+            res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
 
 void solve(){
-
+    ll n; cin >> n;
+    cout << fexp(2,n,MOD) << endl;
 }
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
     ll t=1;
-    cin >> t;
+    //cin >> t;
     while(t--) solve();
     return 0;
 }

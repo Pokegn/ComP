@@ -15,13 +15,23 @@ int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
 void solve(){
-
+    ll n; cin >> n;
+    while(n!=1){
+        cout << n << ' ';
+        if(n%2==1){
+            n = 3*n+1;
+        }
+        else{
+            n = n/2;
+        }
+    }
+    cout << 1;
 }
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
     ll t=1;
-    cin >> t;
+    //cin >> t;
     while(t--) solve();
     return 0;
 }

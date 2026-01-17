@@ -15,7 +15,27 @@ int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
 void solve(){
+    ll  n,m,k; cin >> n >> m >> k;
+    if(k>=m) k=m-1;
+    vlli a(n); for(int i=0; i<n; i++) cin >> a[i];
+    vlli lefts(n);
+    for(int i=0; i<m; i++){
+        lefts[i] = max(a[i], a[n-1-(m-1)+i]);
+    }
 
+    ll ans = -1;
+
+    for(int forcedlefts = 0; forcedlefts <= k; forcedlefts++){
+        int forcedrights = k-forcedlefts;
+        ll secure = 1e10;
+        for(int x = forcedlefts; x<m-forcedrights; x++){
+            secure = min(secure, lefts[x]);
+        }
+        ans = max(ans, secure);
+    }
+
+    cout << ans << endl;
+    return;
 }
 
 int main(){

@@ -6,8 +6,8 @@ using vi = vector<int>;
 using vlli = vector<ll>;
 using vvi = vector<vi>;
 using vvlli = vector<vlli>;
-#define forn(i, a, b) for(ll i = a; i < b; i++)
-#define rof(i, a, b) for(ll i = a; i >= b; i--)
+#define forn(i, a, b) for(lli i = a; i < b; i++)
+#define rof(i, a, b) for(lli i = a; i >= b; i--)
 #define nl '\n'
 #define endl '\n'
 #define pb push_back
@@ -20,8 +20,6 @@ void solve(){
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
-    ll t=1;
-    cin >> t;
-    while(t--) solve();
+    solve();
     return 0;
 }

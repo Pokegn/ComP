@@ -15,7 +15,37 @@ int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
 void solve(){
+    ll x,y; cin >> y >> x;
+    ll ans = 0;
+    if(x>y){
+        if(x%2 == 1){
+            ans = x*x;
+            ans -= y-1;
+            cout << ans << endl;
+            return;
+        }
+        else{
+            ans = (x-1)*(x-1);
+            ans+=y;
+            cout << ans << endl;
+            return;
+        }
+    }
+    else{
+        if(y%2 == 0){
+            ans = y*y;
+            ans -= x-1;
+            cout << ans << endl;
+            return;
+        }
+        else{
+            ans = (y-1)*(y-1);
+            ans+=x;
+            cout << ans << endl;
+            return;
+        }
 
+    }
 }
 
 int main(){

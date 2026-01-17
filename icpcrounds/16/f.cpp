@@ -15,7 +15,28 @@ int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
 void solve(){
+    priority_queue<int> pq;
+    ll n,k; cin >> n >> k;
+    string s; cin >> s;
+    s+="0";
+    n++;
+    ll curr = 0;
+    ll total = 0;
+    for(int i=0; i<n; i++){
+        if(s[i] == '0'){
+            pq.push(curr);
+            total+=(curr*(curr+1))/2;            
+            curr = 0;
+        }
+        else{
+            curr++;
+        }
+    }
 
+    ll ans = 0;
+    while(total > k){
+        ans++;
+    }
 }
 
 int main(){

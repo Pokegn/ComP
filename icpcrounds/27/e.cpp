@@ -14,8 +14,40 @@ using vvlli = vector<vlli>;
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
-void solve(){
+ll fexp(ll a, ll b, ll m) {
+    a %= m;
+    ll res = 1;
+    while (b > 0) {
+        if (b & 1)
+            res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
 
+ll suma(ll a, ll m){
+    if(a == 0) return 0;
+    ll ans =0;
+    ll k;
+    k = a/2;
+    if(a%2 == 0){
+        ans+=fexp(2,k+1, m);
+        ans-=2;
+    }
+    else{
+        ans+=fexp(2,k+1, m);
+        ans+=fexp(2,k, m);
+        ans-=2;
+    }
+    return (ans%m);
+}
+
+void solve(){
+    ll l,r,m; cin >> l >> r >> m;
+    ll ans = suma(r, m) - suma(l-1, m);
+    ans = ((ans%m)+m)%m;
+    cout << ans << endl;
 }
 
 int main(){
