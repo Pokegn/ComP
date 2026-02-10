@@ -20,13 +20,14 @@ long long fexp(long long a, long long b, long long m = MOD) {
 }
 
 ll rang(ll a, ll b){
+    if(b-a+1<0) return 0;
     return b-a+1;
 }
 
 
 int main(){
     int tt = 1;
-    //cin >> tt;  
+    cin >> tt;  
 
     pot2[0] = 1;
     pot3[0] = 1;
@@ -46,46 +47,55 @@ int main(){
 ll calcula1(int i, int j, int x, int y, int n){//i es el inferior, j el superior, y el rango actual es [y,x]
     ll ret =0;
     ll tamano = x-y+1;
+    ll casosmalos = fexp(2, rang(i+1, j-1));
     set<int> ocupados;
     if(y<= i && i<=x) ocupados.insert(i);
     if(y<=j && j<=x) ocupados.insert(j);
     tamano-=ocupados.size();
     if(tamano<=0) return 0;
 
-    if(i<j){
+    if(i<=j){
     if(y<i && x>i && j>x){ //caso 1
         ret = fexp(2, rang(y, i-1), MOD); ret%=MOD;
         ret *= fexp(3, rang(i+1,x), MOD); ret%=MOD;
         ret *= fexp(2, rang(x+1, j-1), MOD); ret%=MOD;
-        return ret-1;
+        ret-=casosmalos; ret=ret+MOD; ret%=MOD;
+        return ret;
     }
     if(y<i && x<i){ //caso 2
         ret = fexp(2, rang(y, x), MOD); ret%=MOD;
         ret *= fexp(2, rang(i+1, j-1), MOD); ret%=MOD;
-        return ret-1;
+        ret-=casosmalos; ret=ret+MOD; ret%=MOD;
+        return ret;
     }
     if(y>j && x>j){ //caso 3
         ret = fexp(2, rang(y, x), MOD); ret%=MOD;
         ret *= fexp(2, rang(i+1, j-1), MOD); ret%=MOD;
-        return ret-1;
+        ret-=casosmalos; ret=ret+MOD; ret%=MOD;
+        return ret;
     }
     if(y<j && x>j && y>i){ //caso 4
         ret = fexp(2, rang(i+1, y-1), MOD); ret%=MOD;
         ret *= fexp(3, rang(y, j-1), MOD); ret%=MOD;
         ret *= fexp(2, rang(j+1, x), MOD); ret%=MOD;
-        return ret-1;
+        ret-=casosmalos; ret=ret+MOD; ret%=MOD;
+        return ret;
     }
     if(i<y && j>x){ //caso 5
+        //cout << i << ' ' << j << ' ' << y << ' ' << x << endl;
         ret = fexp(2, rang(i+1,y-1)); ret%=MOD;
-        ret *= fexp(3, rang(y,x)); ret%=MOD;
         ret *= fexp(2, rang(x+1,j-1)); ret%=MOD;
-        return ret-1;
+        ret *= fexp(3, rang(y,x));
+
+        ret-=casosmalos; ret=ret+MOD; ret%=MOD;
+        return ret;
     }
     if(y<i && j<x){ //caso 6
         ret = fexp(2, rang(y,i-1), MOD);
         ret *= fexp(3, rang(i+1, j-1), MOD);
         ret *= fexp(2, rang(j+1, x), MOD);
-        return ret-1;
+        ret-=casosmalos; ret=ret+MOD; ret%=MOD;
+        return ret;
     }
     }   
     else{
@@ -93,22 +103,22 @@ ll calcula1(int i, int j, int x, int y, int n){//i es el inferior, j el superior
     if(y<i && x>i && j>x){ //caso 1
         if(j-x<=1) return 0;
         ret = fexp(2, rang(y, i-1), MOD); ret%=MOD;
-        return ret-1;
+        return ret-((j-i)==1);
     }
     if(y<i && x<i){ //caso 2
         if(rang(i+1, j-1)>0) return 0;
         ret = fexp(2, rang(y, x), MOD); ret%=MOD;
-        return ret-1;
+        return ret-((j-i)==1);
     }
     if(y>j && x>j){ //caso 3
         if(rang(i+1, j-1)>0) return 0;
         ret = fexp(2, rang(y, x), MOD); ret%=MOD;
-        return ret-1;
+        return ret-((j-i)==1);
     }
     if(y<j && x>j && y>i){ //caso 4
         if(rang(i+1, y-1)>0) return 0;
         ret = fexp(2, rang(j+1, x), MOD); ret%=MOD;
-        return ret-1;
+        return ret-((j-i)==1);
     }
     if(i<y && j>x){ //caso 5
         if(rang(i+1, y-1)>0 || rang(x+1, j-1)>0) return 0;
@@ -117,7 +127,7 @@ ll calcula1(int i, int j, int x, int y, int n){//i es el inferior, j el superior
     if(y<i && j<x){ //caso 6
         ret = fexp(2, rang(y,i-1), MOD);
         ret *= fexp(2, rang(j+1, x), MOD);
-        return ret-1;
+        return ret-((j-i)==1);
     }
     }  
     return 0;
@@ -175,10 +185,10 @@ void solve(){
 
                 calc = calcula1(i,j,maxM3, minm3, n);
                 ans+=calc*fexp(2, MOD-2, MOD); ans%=MOD;
-                // if(calc>0 || (i == j && i == 1)){
-                //     cout << calc << ' ' << "rango1" << ' ' << 0 << ' ' << n-1 << " rango2 " << ' ' << i << ' ' << j << " rango3 "<< minm3 << ' ' << maxM3 <<endl;
-                //     cout << endl;
-                // }
+                if(calc>0 ){
+                    cout << calc << ' ' << "rango1" << ' ' << 0 << ' ' << n-1 << " rango2 " << ' ' << i << ' ' << j << " rango3 "<< minm3 << ' ' << maxM3 <<endl;
+                    cout << endl;
+                }
 
                 //ans-=fexp(2, j-i+1, MOD)*fexp(2, MOD-2, MOD); ans%=MOD;
             }
@@ -189,3 +199,4 @@ void solve(){
     //cout << calcula1(1,1,)
     cout << ans << '\n';
 }
+
