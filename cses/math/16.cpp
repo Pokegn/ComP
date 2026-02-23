@@ -15,6 +15,34 @@ int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 #define MOD 1000000007
 
+int m = 1e6;
+vector<bool> is_prime(m+1, true);
+vector<ll> primes;
+
+ll lcm(vector<ll> a){
+    vector<ll> pot(primes.size(), 0);
+    for(auto x:a){
+        if(x==1) continue;
+        vector<ll> xpot(primes.size(), 0);
+        for(int j=0; j<primes.size(); j++){
+            while(x%primes[j] == 0){
+                xpot[j]++;
+                x/=primes[j];
+            }
+            pot[j] = max(pot[j], xpot[j]);
+        }
+    }
+
+    ll ans = 1;
+    for(int i=0; i<primes.size(); i++){
+        while(pot[i]>0){
+            ans*=primes[i]; ans%=MOD;
+            pot[i]--;
+        }
+    }
+    return ans;
+}
+
 ll fexp(ll a, ll b, ll m) {
     a %= m;
     ll res = 1;
@@ -50,13 +78,7 @@ void solve(){
         g = __gcd(g, sizes[i]);
     }
 
-    ll ans = 1;
-    for(auto s: sizes){
-        cout << s << ' ';
-        ll g = __gcd(ans, s);
-        ans *= s; ans%=MOD;
-        ans *= fexp(g, MOD-2, MOD); ans%=MOD;
-    }
+    ll ans = lcm(sizes);
     cout << ans << endl;
     return;
 }
@@ -64,9 +86,18 @@ void solve(){
 int main(){
     cin.tie(0)->sync_with_stdio(false);
     ll t=1;
-    cout << 5790705324096749568 % MOD << endl;
-    return 0;
-    //cin >> t;
+
+    is_prime[0] = is_prime[1] = false;
+    for (int i = 2; i <= m; i++) {
+        if (is_prime[i] && (long long)i * i <= m) {
+            for (int j = i * i; j <= m; j += i)
+                is_prime[j] = false;
+        }
+    }
+    for(int i=2; i<=m; i++){
+        if(is_prime[i]) primes.push_back(i);
+    }
+
     while(t--) solve();
     return 0;
 }
