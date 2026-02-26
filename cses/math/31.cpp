@@ -18,13 +18,21 @@ int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
 void solve(){
-
+    int n; cin >> n;
+    vector<int> a(n); rep(i, 0, n) cin >> a[i];
+    vector<int> almenosi(101, 0);
+    rep(i, 0, 101) rep(j, 0, n) if(a[j] >= i) almenosi[i]++;
+    ll parejasmalas = 0;
+    rep(i, 1, 101){
+        
+    }    
+    return;
 }
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
     ll t=1;
-    cin >> t;
+    //cin >> t;
     while(t--) solve();
     return 0;
 }

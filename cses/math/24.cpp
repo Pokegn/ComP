@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <bits/stdc++.h> //graph coso 2
 using namespace std;
 template <typename T> using minheap = priority_queue<T, vector<T>, greater<T>>;
 using ll = long long;
@@ -18,6 +18,8 @@ int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 #define mod 1000000007
 
+const int sz = 101;
+
 ll modpow(ll b, ll e) {
 ll ans = 1;
 for (; e; b = b * b % mod, e /= 2)
@@ -25,87 +27,65 @@ if (e & 1) ans = ans * b % mod;
 return ans;
 }
 
-vector<ll> berlekampMassey(vector<ll> s) {
-int n = sz(s), L = 0, m = 0;
-vector<ll> C(n), B(n), T;
-C[0] = B[0] = 1;
-ll b = 1;
-rep(i,0,n) { ++m;
-ll d = s[i] % mod;
-rep(j,1,L+1) d = (d + C[j] * s[i - j]) % mod;
-if (!d) continue;
-T = C; ll coef = d * modpow(b, mod-2) % mod;
-rep(j,m,n) C[j] = (C[j] - coef * B[j - m]) % mod;
-if (2 * L > i) continue;
-L = i + 1 - L; B = T; b = d; m = 0;
-}
-C.resize(L + 1); C.erase(C.begin());
-for (ll& x : C) x = (mod - x) % mod;
-return C;
-}
-
-typedef vector<ll> Poly;
-    ll linearRec(Poly S, Poly tr, ll k) {
-    int n = sz(tr);
-    auto combine = [&](Poly a, Poly b) {
-    Poly res(n * 2 + 1);
-    rep(i,0,n+1) rep(j,0,n+1)
-    res[i + j] = (res[i + j] + a[i] * b[j]) % mod;
-    for (int i = 2 * n; i > n; --i) rep(j,0,n)
-    res[i - 1 - j] = (res[i - 1 - j] + res[i] * tr[j]) % mod;
-    res.resize(n + 1);
-    return res;
-    };
-    Poly pol(n + 1), e(pol);
-    pol[0] = e[1] = 1;
-    for (++k; k; k /= 2) {
-    if (k % 2) pol = combine(pol, e);
-    e = combine(e, e);
+template<class T, int N> struct Matrix {
+    typedef Matrix M;
+    array<array<T, N>, N> d{};
+    M operator*(const M& m) const {
+        M a;
+        rep(i,0,N) rep(j,0,N) a.d[i][j] = -1;
+        rep(i,0,N) rep(j,0,N)
+        rep(k,0,N){
+            if(d[i][k]>0 && m.d[k][j]>0) if(a.d[i][j] >0 ) a.d[i][j] = min(a.d[i][j], d[i][k]+m.d[k][j]); 
+            else a.d[i][j] = d[i][k]+m.d[k][j];
+        } 
+        return a;
     }
-    ll res = 0;
-    rep(i,0,n) res = (res + pol[i + 1] * S[i]) % mod;
-    return res;
-}
+
+    M operator^(ll p) const {
+        bool flag = false;
+        assert(p >= 0);
+        M a, b(*this);
+        rep(i,0,N) a.d[i][i] = 1;
+        while (p) {
+        if (p&1){
+            if(flag) a = a*b; 
+            else{
+                a = b;
+                flag = true;
+            }
+        } 
+        b = b*b;
+        p >>= 1;
+        }
+        return a;
+    }
+};
 
 void solve(){
-    ll n; cin >> n;
-    //vector<vector<ll>> grafo(n+1, vector<ll>(0));
-    vector<pair<ll, ll>> edge;
-
+    int n; cin >> n;
+    Matrix<ll, sz> A;
     ll m; cin >> m;
     ll k; cin >> k;
+
+    rep(i, 0, sz) rep(j, 0, sz) A.d[i][j] = -1;
+
     for(int i=0; i<m; i++){
-        ll u,v; cin >> u >> v;
+        ll u,v,w; cin >> u >> v>> w;
         //grafo[u].push_back(v);
-        edge.push_back({u, v});
+        if(A.d[u][v]==-1) A.d[u][v] = w;
+        else A.d[u][v] = min(A.d[u][v], w);
     }
 
-    vector<ll> ans(0);
-    vector<ll> paths(n+1, INT64_MAX);
-    paths[1] = 0;
-    ans.push_back(paths[n]%mod);
-    for(int j=1; j<2*n; j++){
-        vector<ll> newpaths(n+1, INT64_MAX);
-        for(auto e: edge){
-            newpaths[e.second] += paths[e.first];
-            newpaths[e.second]%=mod;
-        }
-        paths = newpaths;
-        ans.push_back(paths[n]%mod);
-    }
+    A =  A^k;
 
-    vector<ll> vec = berlekampMassey(ans);
-    // for(auto v: vec) cout << v << ' ';
-    // cout << endl;
-    // return;
-    for(auto v: vec) v = (v%mod+mod)%mod;
-    ll answer = linearRec(ans, vec, k);
-    cout <<answer%mod << endl;
-
-
-
-
-
+    // rep(i, 0, sz){
+    //     rep(j, 0, sz){
+    //         cout << A.d[i][j] << ' ';
+    //     }
+    //     cout << endl;
+    // }
+    cout << A.d[1][n] << endl;
+    return;
 }
 
 int main(){
