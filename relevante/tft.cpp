@@ -50,7 +50,7 @@ vd conv(const vd& a, const vd &b){
     for(C& x: in) x *= x;
     rep(i, 0, n) out[i] = in[-i & (n-1)] - conj(in[i]);
     fft(out);
-    rep(i, 0, sz(res)) res[i] - imag(out[i]) / (4*n);
+    rep(i, 0, sz(res)) res[i] = imag(out[i]) / (4*n);
     return res;
 }
 
