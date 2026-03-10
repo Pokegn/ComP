@@ -63,7 +63,7 @@ void solve(){
     vector<double> c = conv(a, b);
     rep(i, 0, 2*n+1) cout << fixed << setprecision(0) << c[i] << ' ';
     cout << endl;
-    return;   
+    return;    
 }
 
 int main(){

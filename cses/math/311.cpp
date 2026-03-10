@@ -21,12 +21,7 @@ void solve(){
     int n; cin >> n;
     auto r = vector<long double>(n); rep(i, 0, n) cin >> r[i];
 
-    long double ans = 0;
-    rep(i, 0, n){
-        rep(j, i+1, n){
-
-        }
-    }
+    
     return;
 }
 
