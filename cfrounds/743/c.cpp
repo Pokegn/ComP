@@ -12,43 +12,58 @@ long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x))
 
 void solve(){
     int n; cin >> n;
-    vector<vector<int>> a(n+1); //los que necesitan al weon i
-
-    
-    vector<bool> vis(n+1, false);
-    vector<vector<int>> ans(n+1);
+    int ki;
+    vector<vector<int>> grafo(n);
+    vector<int> ksize(n);
+    vector<vector<int>> dependencias(n);
     rep(i, 1, n+1){
-        int k; cin >> k;
-        if(k == 0) ans[0].push_back(i);
-        rep(j, 0, k){
-            int xd; cin >> xd;
-            a[xd].push_back(i);
-        } 
-    }
-
-    for(auto xd: a) sort(all(xd));
-    
-    vector<int> need(n+1, 0);
-    rep(i, 1, n+1){
-        need[i] = a[i].size();
-    }
-
-
-    rep(i, 0, n){
-        for(auto curr: ans[i]){//curr es un weon que puedo leer despues de i leidas
-            if(vis[curr]) continue;
-            vis[curr] = true;
-
-            for(auto j: a[curr]){//los que necesitan a curr
-                need[j]--;
-                if(need[j] == 0){
-
-                }
-            }
+        cin >> ki;
+        ksize[i-1] = ki;
+        rep(j, 1, ki+1){
+            int x; cin >> x;
+            grafo[x-1].push_back(i-1);
+            dependencias[i-1].push_back(x-1);
         }
     }
 
+    vector<int> in_degree(n);
+    for(const vector<int> &nodes : grafo){
+        for(int node : nodes) in_degree[node]++;
+    }
 
+    queue<int> q;
+    rep(i, 0, n) if(in_degree[i] == 0) q.push(i);
+
+    vector<int> top;
+    while(!q.empty()){
+        int curr = q.front(); q.pop();
+        top.push_back(curr);
+        for(auto next: grafo[curr]) if (--in_degree[next] == 0) q.push(next);
+    }
+
+    
+
+    if(top.size() == n){
+        vector<int> read(n, 1); //read[i] tiene la leida del actual vertice i
+        rep(i, 0, n){ //top[i] es el actual vertice
+            for(auto d: dependencias[top[i]]){ //d es el actual vertice, top[d] es 
+                int minread = (d < top[i] ? read[d] : read[d]+1);
+                read[top[i]] = max(read[top[i]], minread);
+            }
+        }
+        int ans = 0;
+        // rep(i, 0, n) cout << read[i] << ' ';
+        // cout << endl;
+        rep(i, 0, n) ans = max(ans, read[i]);
+        cout << ans << endl;
+
+        // rep(i, 0, n-1) cout << top[i]+1 << ' ';
+        // cout << top.back() + 1 << endl;
+    }
+    else{
+        cout << -1 << endl;
+    }
+    return;
 }
 
 
