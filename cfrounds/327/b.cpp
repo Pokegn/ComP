@@ -34,7 +34,9 @@ double absdotp(double a, double b, double c, double d){
 }
 
 void solve(){
-    
+    double x1, y1, x2, y2; cin >> x1 >> y1 >> x2 >> y2;
+    double vmax, t; cin >> vmax >> t;
+    double vx, vy, wx, wy; cin >> vx >> vy >> wx >> wy;
 }
 
 
