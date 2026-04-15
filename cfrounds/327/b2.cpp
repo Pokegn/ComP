@@ -22,9 +22,9 @@ double tmin(double x, double y, double vmax, double vx, double vy){ //tiempo req
     //ternary search para encontrar el mejor angulo que tomar
 }
 
-double (){
+//double (){
     //cada angulo al que dirigirse tiene una respuestaz
-}
+//}
 //tengo una funcion que me da el minimo tiempo requerido
 //esa funcion usa una funcion que mee da el minimo tiempo requerido al final si empieza en cierta direccion
 //esa funcion tiene una funcion que me da el minimo tiempo requerido si 
