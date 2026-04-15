@@ -6,14 +6,15 @@ template <typename T> using minheap = priority_queue<T, vector<T>, greater<T>>;
 #define sz(x) (int) (x).size()
 #define endl '\n'
 #define pb push_back
-#define fi first
-#define se second
 typedef long long ll;
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
 void solve(){
-    
+    string s = "bigchadjeff";
+    int i; cin >> i;
+    cout << s[i-1] << endl;
+    return;
 }
 
 
