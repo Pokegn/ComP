@@ -23,16 +23,18 @@ void solve(){
             cin >> re;
             if(re == "Yes"){
                 r = min(n, (l+r)/2+k);
+                l = max(1ll, l-k);
                 continue;
             }
             else{
                 l = max(1ll, (l+r)/2+1-k);
+                r = min(n, r+k);
                 continue;
             }
         }
         else{
             ll rango = (r-l+1);
-            ll random = rand()%rango;
+            ll random = (rand()+rand())%rango;
             cout << l+random << ' ' <<l+random << endl;
             cin >> re;
             if(re == "Yes"){
