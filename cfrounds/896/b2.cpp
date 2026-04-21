@@ -21,63 +21,57 @@ void solve(){
         cout << "no" << endl; return;
     }
     s/=n;
+    //cout << s << ' ';
     vector<ll> difs(n);
     rep(i, 0, n) difs[i] = s-a[i];
     vector<int> signo(n);
     rep(i, 0, n) signo[i] = (difs[i] < 0 ? -1 : 1);
     rep(i, 0, n) difs[i] = abs(difs[i]);
 
-    vector<int> tipo(n);
-    // vector<ll> dar;
-    // vector<ll> recibir;
-    // vector<pair<ll, ll>> maybedar;
-    // vector<pair<ll, ll>> mayberecibir;
     vector<int> count(40, 0);
-    vector<int> maybecount(40, 0);//cuantos tengo o me faltan de 2^x - 0 o 2^x+1 - 2^x
+    vector<int> DT(40, 0);//cuantos tengo o me faltan de 2^x - 0 o 2^x+1 - 2^x
+    vector<int> DS(40, 0);
     rep(i, 0, n){
-        if(difs[i] == 0) tipo[i] = 1;
+        if(difs[i] == 0) continue;
         else if(pow2_lb(difs[i]) == difs[i]){
-            tipo[i] = 2;
-            pair<ll, ll> p1, p2;
-            p1 = {difs[i], 2*difs[i]}; p2 = {0,difs[i]};
-            maybecount[msb(difs[i])] += signo[i]; 
-            // if(signo[i] == 1){
-            //     maybedar.push_back(p2);
-            //     mayberecibir.push_back(p1);
-            // }
-            // else{
-            //     maybedar.push_back(p1);
-            //     mayberecibir.push_back(p2);
-            // }
+            if(signo[i] == 1)
+            DT[msb(difs[i])] ++;
+            else DS[msb(difs[i])]++;
         } 
         else{
-            tipo[i] = 3;
             ll grande = pow2_lb(difs[i]);
-            ll chico = grande - pow2_lb(difs[i]);
+            ll chico = grande - difs[i];
             if(pow2_lb(chico) != chico){
                 cout << "no" << endl;
                 return;
             }
             count[msb(grande)] += signo[i];
             count[msb(chico)] -= signo[i];
-            // if(signo[i] == -1) swap(grande, chico);
-            // recibir.push_back(grande);
-            // dar.push_back(chico);
         }
     }
+    //rep(i, 0, 5) cout << i << ' ' << count[i] << ' ' << DS[i] << ' ' << DT[i] << endl;
+    //cout << endl;
 
-    rep(i, 0, 40){
-        while(count[i]!=0){
-            if(count[i] < 0){
-                count[i]++;
-                
-            }
-            else{
+    swap(DT, DS);
+    for(int i = 31; i>=0; i--){
+        //cout << i << ' ' << count[i+1] << ' ' << count[i] << ' ' << DS[i] << ' ' << DT[i] << endl;
+        int coso = DS[i]-DT[i]+count[i+1];
+        count[i] += 2*coso-DS[i]+DT[i];
+        count[i+1] += -coso+DS[i]-DT[i];
+        //cout << i << ' ' << count[i+1] << ' ' << count[i] << ' ' << DS[i] << ' ' << DT[i] << endl;
+        //cout << coso << endl;
 
-            }
+        if(coso > DS[i] || coso < -DT[i]){
+            cout << "no" << endl;
+            return;
         }
     }
-
+    if(count[0] == 0){
+        cout << "yes" << endl;
+        return;
+    }
+    cout << "no" << endl;
+    return;
 }
 
 
