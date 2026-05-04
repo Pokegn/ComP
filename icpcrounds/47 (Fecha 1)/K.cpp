@@ -30,14 +30,15 @@ template<class T> struct Point{
 };
 
 typedef Point<long double>P;
-bool circleInter(P a, P b, long double r1, long double r2, pair<P,P>&out){
-    if(a==b) {assert(r1 != r2); return false;}
+bool circleInter(P a, P b, long double r1, long double r2, pair<P,P>*out){
+    if(a==b) {return false;}
     P vec = b-a;
     long double d2 = vec.dist2(), sum = r1+r2, dif = r1-r2;
+    if(d2 < 0.000001) return false;
     long double p = (d2+r1*r1-r2*r2)/(d2*2), h2 = r1*r1 - p*p*d2;
-    if(sum*sum + 1e-10 < d2 || dif*dif > 1e-10 + d2) return false;
+    if(sum*sum < d2 || dif*dif > d2) return false;
     P mid = a + vec*p, per = vec.perp() * sqrt(fmax(0, h2) / d2);
-    out = {mid+per, mid-per};
+    *out = {mid+per, mid-per};
     return true;
 }   
 
@@ -46,7 +47,7 @@ long double distance(P a, P b){
 }
 
 bool inCircle(P center, P orig, long double r){
-    if(distance(center, orig) <= r + 1e-10) return true;
+    if(distance(center, orig) <= r + 0.0000001) return true;
     return false;
 }
 
@@ -62,7 +63,7 @@ void solve(){
     for(int i=0; i<n; i++){
         for(int j=i+1; j<n; j++){
             pair<P,P> out;
-            if(circleInter(c[i], c[j], r[i], r[j],out)){
+            if(circleInter(c[i], c[j], r[i], r[j],&out)){
                 pts.push_back(out.first);
                 pts.push_back(out.second);
                 //cout << "de " << c[i].x << ' ' << c[i].y << ' ' << r[i] << " a " << c[j].x << ' ' << c[j].y << ' ' << r[j] << ": "; 
@@ -75,10 +76,11 @@ void solve(){
         P X; if(inCircle(c[i], P(px, py), r[i])) continue;
 
         long double d1 = distance(P(px, py), c[i]);
-        long double xx = (px-c[i].x);
-        long double yy = (py-c[i].y);
-        X.x = px+(xx * (d1 - r[i])/d1);
-        X.y = py+(yy * (d1 - r[i])/d1);
+        long double xx = -(px-c[i].x);             
+        long double yy = -(py-c[i].y);
+
+        X.x = px+(xx * ((d1 - r[i])/d1));
+        X.y = py+(yy * ((d1 - r[i])/d1));
         pts.push_back(X);
         //cout << "de " << px << ' ' << py << " con " << c[i].x << ' ' << c[i].y << ' ' << r[i] << ": " << X.x << ' ' << X.y << endl;
     }
@@ -88,14 +90,13 @@ void solve(){
         if(!inCircle(P(px, py), c[i], r[i])) todos = false;
     }
     if(todos){
-        cout << fixed << setprecision(10) << 0 << endl;
+        cout << 0 << endl;
         return;
     }
 
-    int szz = sz(pts);
     long double ans = 10000000;
     // cout <<fixed << setprecision(10) << ans<< endl;
-    for(auto pt : pts){
+    for(P pt : pts){
         // cout << pt.x << ' ' << pt.y << endl;
         bool dentro = true;
         for(int i=0; i<n; i++){
