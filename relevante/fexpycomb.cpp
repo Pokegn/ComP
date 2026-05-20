@@ -19,6 +19,7 @@ ll fact[20001];
 ll inv[20001];
 
 
+
 long long fexp(long long a, long long b, long long m) {
     a %= m;
     long long res = 1;
@@ -30,6 +31,8 @@ long long fexp(long long a, long long b, long long m) {
     }
     return res;
 }
+
+
 
 ll fexp(ll a, ll b, ll m) {
     a %= m;
