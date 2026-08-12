@@ -1,27 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
-template <typename T> using minheap = priority_queue<T, vector<T>, greater<T>>;
-#define rep(i, a, b) for(int i=a; i<(b); ++i)
-#define all(x) begin(x), end(x)
-#define sz(x) (int) (x).size()
-#define endl '\n'
-#define pb push_back
-#define fi first
-#define se second
-typedef long double ld;
-typedef long long ll;
-int msb(long long int x) { return 63 - __builtin_clzll(x);}
-long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
-void solve(){
-    
-}
+int main() {
+    const int N = 100000;
+    vector<bool> can(N + 1, false);
 
+    for (int a = 0; a * a <= N; ++a) {
+        for (int b = 0; a * a + b * b <= N; ++b) {
+            int val = a * a + b * b;
+            if (val >= 1) {
+                can[val] = true;
+            }
+        }
+    }
 
-int main(){
-    cin.tie(0)->sync_with_stdio(false);
-    int t=1; 
-    cin >> t;
-    while(t--) solve();
+    int count = 0;
+    for (int i = 1; i <= N; ++i) {
+        if (can[i]) count++;
+    }
+
+    cout << count << endl;
     return 0;
 }

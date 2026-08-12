@@ -17,24 +17,19 @@ long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x))
 
 void solve(){
     int n; cin >> n;
-    int curr0 = n+1;
-    int curr1 = 2*n;
-    int ans[n];
-    rep(i, 0, n){
-        if((i%2) == 0){
-            ans[i] = curr0;
-            curr0++;
-        }
-    }
+    vector<ll> a(n); rep(i, 0, n) cin >> a[i];
+    int signo = 1;
+    vector<int> movs;
     for(int i = n-1; i>=0; i--){
-        if((i%2) == 1){
-            ans[i] = curr1;
-            curr1--;
+        if(a[i]*signo > 0){
+            movs.push_back(i+1);
+            signo*=-1;
         }
     }
-    rep(i, 0, n ) cout << ans[i] << ' ';
+
+    cout << movs.size() << endl;
+    for(auto m:movs) cout << m << ' ';
     cout << endl;
-    return;
 }
 
 

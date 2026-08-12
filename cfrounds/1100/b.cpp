@@ -16,24 +16,18 @@ int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
 void solve(){
-    int n; cin >> n;
-    int curr0 = n+1;
-    int curr1 = 2*n;
-    int ans[n];
+    ll n; cin >> n;
+    vector<ll> a(n), b(n);
+    rep(i, 0, n) cin >> a[i];
+    rep(i, 0, n) cin >> b[i];
+    ll ans = 0;
+    ll maxmini = 0;
     rep(i, 0, n){
-        if((i%2) == 0){
-            ans[i] = curr0;
-            curr0++;
-        }
+        ans += max(a[i], b[i]);
+        maxmini = max(maxmini, min(a[i], b[i]));
     }
-    for(int i = n-1; i>=0; i--){
-        if((i%2) == 1){
-            ans[i] = curr1;
-            curr1--;
-        }
-    }
-    rep(i, 0, n ) cout << ans[i] << ' ';
-    cout << endl;
+
+    cout << ans + maxmini << endl;
     return;
 }
 

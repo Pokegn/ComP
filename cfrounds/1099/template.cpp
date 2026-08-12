@@ -9,6 +9,8 @@ template <typename T> using minheap = priority_queue<T, vector<T>, greater<T>>;
 #define fi first
 #define se second
 typedef long double ld;
+typedef vector<int> vi;
+typedef pair<int, int> pii;
 typedef long long ll;
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}

@@ -17,31 +17,22 @@ long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x))
 
 void solve(){
     int n; cin >> n;
-    int curr0 = n+1;
-    int curr1 = 2*n;
-    int ans[n];
-    rep(i, 0, n){
-        if((i%2) == 0){
-            ans[i] = curr0;
-            curr0++;
-        }
-    }
-    for(int i = n-1; i>=0; i--){
-        if((i%2) == 1){
-            ans[i] = curr1;
-            curr1--;
-        }
-    }
-    rep(i, 0, n ) cout << ans[i] << ' ';
-    cout << endl;
-    return;
+    string s;
+    rep(i, 0, n) s+= 'D';
+    rep(i, 0, n) s+= "RDDLD";
+    rep(i, 0, n) s+= "URRDD";
+    rep(i, 0, n) s+= "ULLDL";
+    rep(i, 0, n) s+= "D";
+    
+    cout << s.length() << endl;
+    cout << s << endl;
 }
 
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
     int t=1; 
-    cin >> t;
+    //cin >> t;
     while(t--) solve();
     return 0;
 }
