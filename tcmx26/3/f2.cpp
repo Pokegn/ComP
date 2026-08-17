@@ -43,15 +43,16 @@ void solve(){
     for(int i=0; i<n; i++){
         int idx = a[i].second;
         for(auto j: grafo[idx]){
-            if(r[j] > a[i].first) usable[a[j].second] = false;
+            if(r[j] < r[idx]) usable[a[j].second] = false;
         }
     }
  
     set<ll> yes;
     for(int i=0; i<n; i++){
-        if(!usable[i]) continue;
-        yes.insert(i);
-        for(auto j: grafo[i]){
+        int idx = a[i].second;
+        if(!usable[idx]) continue;
+        yes.insert(idx);
+        for(auto j: grafo[idx]){
             yes.insert(j);
             usable[j] = false;
         }
