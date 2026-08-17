@@ -30,8 +30,32 @@ void solve(){
     }
     vector<int> balanceo(n);
     int currbal = 0;
+    ll iter = 0; // iteraciones
+    ll ints = 0; // cuantas Es son I
+    ll curr = 0; //el balanceo
+    ll taken = 0; //mesas tomadas
     rep(i, 0, n){
-        
+        if(s[i] == 'A'){
+                if(ints < m){
+                    ints++;
+                    if(taken == tables) continue;
+                    taken++;
+                    curr += seats-1;
+                }
+                else{
+                    if(curr == 0) continue;
+                    curr--;
+                }
+            }
+            if(s[i] == 'I'){
+                if(taken == tables) continue;
+                taken++;
+                curr += seats-1;
+            }
+            if(s[i] == 'E'){
+                if(curr == 0) continue;
+                curr--;
+            }
     }
     for(ll m = 0; m <= es; m++){
     //while(l < r){
