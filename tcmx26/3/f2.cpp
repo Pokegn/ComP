@@ -41,9 +41,10 @@ void solve(){
 
     vector<bool> usable(n, true);
     for(int i=0; i<n; i++){
-        int idx = a[i].second;
-        for(auto j: grafo[idx]){
-            if(r[j] < r[idx]) usable[a[j].second] = false;
+        int idx = a[i].second; //al que correspondia antes
+        if(!usable[idx]) continue;
+        for(auto j: grafo[idx]){ //
+            usable[j] = false;
         }
     }
  
