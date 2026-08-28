@@ -1,30 +1,29 @@
-//https://cses.fi/problemset/task/1648
 #include <iostream>
-#define ll long long
+
 using namespace std;
 
-const int MAXN = 4*300000;
-ll st[MAXN];
-ll a[MAXN];
+const int MAXN = 4*200000;
+long long int st[MAXN];
+long long int a[MAXN];
 
-void build(ll u, ll l, ll r){
+void build(int u, int l, int r){
     if(l==r){
         st[u]=a[l];
         return;
     }
-        ll mid =  (l+r)/2;
+        int mid =  (l+r)/2;
         build(2*u+1, l, mid);
         build(2*u+2, mid+1, r);
         st[u] = st[2*u+1]+st[2*u+2];
 }
 
-void update(ll u, ll l, ll r, ll i, ll x){
+void update(int u, int l, int r, int i, int x){
     if(l == r){
         a[i]=x;
         st[u]=x;
         return;
     }
-    ll mid = (l+r)/2;
+    int mid = (l+r)/2;
     if(i <= mid){
         st[u]+=x-a[i];
         update(2*u+1, l, mid, i, x);
@@ -35,21 +34,23 @@ void update(ll u, ll l, ll r, ll i, ll x){
     }
 }
 
-ll query(ll u, ll l, ll r, ll s, ll e){
+int query(int u, int l, int r, int s, int e){
     if (s>r || e<l){
         return 0;
     }
     if(s<=l && r<=e){
         return st[u];
     }
-    ll mid = (l+r)/2;
+    int mid = (l+r)/2;
     return query(2*u+1, l, mid, s, e) 
     + query(2*u+2, mid+1, r, s, e);
 }
 
 int main(){
-    ll n;
-    ll q;
+
+    int n;
+    int q;
+
     cin >> n >> q;
 
     for(int i=0; i<n; i++){
@@ -58,7 +59,7 @@ int main(){
 
     build(0, 0, n-1);
 
-    ll x, b, c;
+    int x, b, c;
     for(int i=0; i<q; i++){
         cin >> x >> b >> c;
         if(x==1){
