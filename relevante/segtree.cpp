@@ -3,7 +3,7 @@
 #define ll long long
 using namespace std;
 
-const int MAXN = 4*300000;
+const int MAXN = 4*200000;
 ll st[MAXN];
 ll a[MAXN];
 
