@@ -33,18 +33,31 @@ void solve(){
     string s; cin >> s;
     ll m = (ll)sz(s);
 
-    vector<ll> countsi(n, 0); //en cuantos su ultimo
+    vector<ll> rots; //todos los que tengo que checar atras ademas de mi coso
+
+    string r;
+    rep(i, 0, m){
+        r = s;
+        rotate(r.begin(), r.end() - i, r.end()); //rotar uno a la derecha
+        if(r == s) rots.push_back(i);
+    }
+
+    vector<ll> countfinal(n, 0); //en cuantos la primera vez que hay un s es acabando hasta i
+    vector<ll> countnunca(n, 0); //en cuantos no hay ningun s de 0 a i
     ll tot = 0;
 
     rep(i, 0, n){
         tot = fexp(26, n, MOD);
+        for(auto j: rots)
         if(i>=m-1){
             
-            countsi[i] = fexp(26, i+1-m, MOD)-countsi[i+1-m];
-            countsi[i] = (countsi[i]%MOD+MOD)%MOD;
+            countfinal[i] = fexp(26, i+1-m, MOD)-countfinal[i+1-m];
+            countfinal[i] = (countfinal[i]%MOD+MOD)%MOD;
 
         } 
 
+        if(i == 0) countnunca[i] = 26 - countfinal[0];
+        else countnunca[i] = ((countnunca[i-1]*26 - countfinal[i])%MOD + MOD)%MOD;
     }
 }
 
