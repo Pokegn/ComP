@@ -16,7 +16,7 @@ void build(ll u, ll l, ll r){
         build(2*u+1, l, mid);
         build(2*u+2, mid+1, r);
         st[u] = st[2*u+1]+st[2*u+2];
-}
+} //build(0, 0, n-1);
 
 void update(ll u, ll l, ll r, ll i, ll x){
     if(l == r){
