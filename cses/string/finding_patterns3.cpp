@@ -14,9 +14,7 @@ typedef pair<int, int> pii;
 typedef long long ll;
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
-
-int k;
-
+ 
 struct AhoCorasick {
     enum {alpha = 26, first = 'a'}; //change
     struct Node{
@@ -44,7 +42,7 @@ struct AhoCorasick {
         rep(i,0, sz(pat)) insert(pat[i], i);
         N[0].back = sz(N);
         N.emplace_back(0);
-
+ 
         queue<int> q;
         for(q.push(0); !q.empty(); q.pop()){
             int n = q.front(), prev = N[n].back;
@@ -60,7 +58,7 @@ struct AhoCorasick {
             }
         }
     }
-
+ 
     vi find(string word){
         int n = 0; 
         vi res; //ll count = 0;
@@ -69,61 +67,61 @@ struct AhoCorasick {
             res.push_back(N[n].end);
             //count += N[n].nmatches;
         }
-
-        int sizee = sz(word);
-        vi ans(k, -1);
-        rep(i, 0, sizee){
-            
-        }
-
         return res;
     }
     
-    vector<vi> findAll(vector<string> &pat, string word){
+    vi findAll(vector<string> &pat, string word){
         vi r = find(word);
-        vector<vi> res(sz(word));
+        // vector<vi> res(sz(word));
+        vi res(sz(pat));
         rep(i,0,sz(word)){
             int ind = r[i];
             while(ind != -1){
-                res[i-sz(pat[ind])+1].push_back(ind);
+                res[ind]++;
                 ind = backp[ind];
             }
         }
         return res;
     }
 };
-
+ 
 void solve(){
     string s; cin >> s;
-    cin >> k;
+    int k; cin >> k;
+    
     vector<string> st(k); rep(i, 0, k) cin >> st[i];
-    auto ac = AhoCorasick(st);
-
-    vi ans = ac.find(s);
-    vector<vi> dependencies(k);
-    rep(i, 0, sz(s)){
-        if(ans[i] != -1){
-            dependencies[backp]
+    unordered_map<string, int> mamamierda;
+    vi trueidx(k);
+    vector<string> dict;
+    int asigno = 0;
+    rep(i,0,k){
+        int &x = mamamierda[st[i]];
+        if(x != 0){ //si ya se asigno
+            trueidx[i] = x-1;
         }
+        else{
+            x = asigno+1;
+            trueidx[i] = asigno;
+            dict.push_back(st[i]);
+            asigno++;
+        }
+    } 
+
+    k = sz(dict);
+    auto ac = AhoCorasick(dict);
+    
+    vi ans = ac.findAll(dict, s);
+    
+    rep(i, 0, sz(st)){
+        int idx = trueidx[i];
+        if(ans[idx] > 0){
+            cout << "YES" << endl;
+        }
+        else cout << "NO" << endl;
     }
-    // vector<vi> ans = ac.findAll(st, s);
-
-    // vi resp(k,0);
-
-    // for(auto v: ans){
-    //     for(auto idx: v){
-    //         resp[idx]++;
-    //     }
-    // }
-    // rep(i, 0, k){
-    //     if(resp[i] > 0){
-    //         cout << "YES" << endl;
-    //     }
-    //     else cout << "NO" << endl;
-    // }
 }
-
-
+ 
+ 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
     int t=1; 

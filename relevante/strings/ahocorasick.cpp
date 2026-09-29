@@ -15,8 +15,6 @@ typedef long long ll;
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
 
-int k;
-
 struct AhoCorasick {
     enum {alpha = 26, first = 'a'}; //change
     struct Node{
@@ -69,13 +67,6 @@ struct AhoCorasick {
             res.push_back(N[n].end);
             //count += N[n].nmatches;
         }
-
-        int sizee = sz(word);
-        vi ans(k, -1);
-        rep(i, 0, sizee){
-            
-        }
-
         return res;
     }
     
@@ -95,39 +86,24 @@ struct AhoCorasick {
 
 void solve(){
     string s; cin >> s;
-    cin >> k;
+    int n = sz(s);
+    int k; cin >> k;
     vector<string> st(k); rep(i, 0, k) cin >> st[i];
     auto ac = AhoCorasick(st);
-
     vi ans = ac.find(s);
-    vector<vi> dependencies(k);
-    rep(i, 0, sz(s)){
-        if(ans[i] != -1){
-            dependencies[backp]
+    rep(i, 0, k){
+        if(ans[i] > 0){
+            cout << "YES" << endl;
         }
+        else cout << "NO" << endl;
     }
-    // vector<vi> ans = ac.findAll(st, s);
-
-    // vi resp(k,0);
-
-    // for(auto v: ans){
-    //     for(auto idx: v){
-    //         resp[idx]++;
-    //     }
-    // }
-    // rep(i, 0, k){
-    //     if(resp[i] > 0){
-    //         cout << "YES" << endl;
-    //     }
-    //     else cout << "NO" << endl;
-    // }
 }
 
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
     int t=1; 
-    // cin >> t;
+    cin >> t;
     while(t--) solve();
     return 0;
 }
