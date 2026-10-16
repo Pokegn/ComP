@@ -14,120 +14,76 @@ using vvlli = vector<vlli>;
 #define all(x) begin(x), end(x)
 #define sz(x) (int) (x).size()
 #define pb push_back
-#define fi first
-#define se second
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
  
-int m = 200;
-vector<bool> is_prime(m+1, true);
-vector<ll> primes;
-
-vector<ll> r;
-vector<pair<ll, ll>> frac;
+vector<long double> a(101);
+vector<vector<long double>> leqi(101, vector<long double>(101, 1)); //probabilidad de que a[i] sea menor o igual a j
+vector<long double> rr(101);
 int n;
-
-ll vp(ll a, ll p){
-    ll ans = 0;
-    while(a%p == 0){
-        ans++;
-        a/=p;
+ 
+long double expected(int l, int r){ //V.E. de inversiones entre [l,m] y [m+1,r]
+    if(l == r) return 0;
+    int m = (l+r)/2;
+    long double ans = expected(l, m) + expected(m+1, r);
+    rep(i, 1, 101){
+        long double lefteqim1 = 0; //igual a i+1 de lado izq
+        long double rightleqi = 0; //menores o iguales que i
+        rep(j, l, m+1){
+            if(rr[j] >= i+1) lefteqim1 += 1.0/rr[j];
+        }
+        rep(j, m+1, r+1){
+            rightleqi += leqi[j][i];
+        }
+        ans += lefteqim1 * rightleqi;
     }
     return ans;
 }
  
-pair<ll, ll> expected(int i, int j){
-    ll x = r[i], y = r[j];
-    if(x <= y){
-        return {x-1, 2*y};
-    }
-    else{
-        return {2*x-y-1, 2*x};
-    }
-}
-
-ll numptot(ll num, ll den, ll maxpot){ //saca la 
-    ll g;
-    ll ans = num;
-    for(auto x: r){
-        g = __gcd(x, den); den/=g; x/=g;
-        ans *= x;
-        ans %= maxpot;
+long double expected2(int l, int r){
+    r++; l++;
+    long double ans = 0;
+    rep(i, 0, n){
+        rep(j, i+1, n){
+            long double add = 0;
+            //casos totales: r[i]r[j], casos favorables = r[i]r[j]/2 - r[i]*(r[j]-r[i]) o + (r[i]-r[j])*r[j]
+            if(rr[i] > rr[j]){
+                add = -1+2*rr[i]-rr[j];
+                add /= rr[i];
+            }
+            else{
+                add = rr[i]-1;
+                add /= rr[j];
+            }
+            //prob de que a[i] > a[j] es a[i] 
+            ans+= add;
+        }
     }
     return ans;
 }
-
+ 
 void solve(){
     cin >> n;
-    r = vector<ll>(n); rep(i, 0, n) cin >> r[i];
-
-    rep(i, 0, n){
-        rep(j, i+1, n){
-            frac.push_back(expected(i,j));
-        }
+    rr = vector<long double>(n); rep(i, 0, n) cin >> rr[i];
+    rep(i, 0, n) rep(j, 1, rr[i]) leqi[i][j] = (long double)j/(long double)rr[i];
+    // rep(i, 0, n){
+    //     rep(j, 1, rr[i]+1) cout << leqi[i][j] << ' ';
+    //     cout << endl;
+    // }
+    long double ans = expected2(0, n-1);
+    long double ans2 = ans*(long double)1000000;
+    //cout << fixed << setprecision(12) << fabsl(ans - nearbyint(ans)) << endl;
+    if(fabsl(ans2 - nearbyint(ans2)) <= (long double)0.000000000001){
+        //cout << "xd";
+        ans = nearbyint(ans2)/2;
+        ans = nearbyint(ans);
+        ans/=(long double)1000000;
+        cout << fixed << setprecision(6) << ans << endl;
+        return;
+    } 
+    else{
+        cout << fixed << setprecision(6) << ans/2 << endl;
     }
-
-    bool flag = true;
-
-    for(auto p: primes){
-        ll totpot = 0;
-        rep(i, 0, n) totpot += vp(r[i], p);
-        ll ppot = 1;
-
-        ll maxpot = 1, sizee = 1;
-        while(maxpot <= 200000){ maxpot *= p; } 
-        // vector<ll> multpot(sizee+1, 0); //la potencia es totpot-multpot
-
-        ll pval = 0;
-
-        for(auto f: frac){
-            ll num = f.fi, den = f.se;
-
-            //potencia del numerador si el denominador es totpot
-            // ll potencia = vp(den, p) - vp(num, p);
-            //el numero del numerador ahora si bien
-            pval += numptot(num, den, maxpot);
-            pval %= maxpot;
-            
-            // multpot[potencia] += numtotpot;
-            // multpot[potencia] %= maxpot;
-        }
-
-        // ll pp = maxpot;
-        // ll p_ans = 0;
-        // rep(i, 0, sz(multpot)){
-        //     p_ans += pp*multpot[i];        
-        //     pp/=p;
-        // }
-
-        cout << p << ' ' << pval << endl;
-        if(p == 2){
-            if(pval%128 == 0){
-
-            }
-            else{
-                flag = false;
-            }
-            continue;
-        }
-        if(p == 5){
-            if(pval%156125 == 0){
-
-            }
-            else{
-                flag = false;
-            }
-            continue;
-        }
-        if(pval%maxpot != 0){
-            flag = false;
-        }
-    }
-
-    if(flag) cout << "caso raro" << endl;
-    else cout << "caso normal" << endl;
-
-    
     
     return;
 }
@@ -135,19 +91,6 @@ void solve(){
 int main(){
     cin.tie(0)->sync_with_stdio(false);
     ll t=1;
-
-    is_prime[0] = is_prime[1] = false;
-    for (int i = 2; i <= m; i++) {
-        if (is_prime[i] && (long long)i * i <= m) {
-            for (int j = i * i; j <= m; j += i){
-                is_prime[j] = false;
-            }
-        }
-    }
-
-    for(int i=2; i<=100; i++){
-        if(is_prime[i]) primes.push_back(i);
-    }
     //cin >> t;
     while(t--) solve();
     return 0;
