@@ -1,21 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 template <typename T> using minheap = priority_queue<T, vector<T>, greater<T>>;
-using ll = long long;
-using vi = vector<int>;
-using vlli = vector<ll>;
-using vvi = vector<vi>;
-using vvlli = vector<vlli>;
-#define forn(i, a, b) for(ll i = a; i < b; i++)
-#define rof(i, a, b) for(ll i = a; i >= b; i--)
-#define nl '\n'
-#define endl '\n'
 #define rep(i, a, b) for(int i=a; i<(b); ++i)
 #define all(x) begin(x), end(x)
 #define sz(x) (int) (x).size()
+#define endl '\n'
 #define pb push_back
 #define fi first
 #define se second
+typedef long double ld;
+typedef vector<int> vi;
+typedef pair<int, int> pii;
+typedef long long ll;
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
  
@@ -70,9 +66,11 @@ void solve(){
     bool flag = true;
 
     for(auto f: frac){
-            ll num = f.fi, den = f.se;
-            cout << num << ' ' << den << endl;
-        }
+        ll num = f.fi, den = f.se;
+        cout << "Fraction(" << num << '/' << den << "), ";
+    }
+    cout << endl;
+    return;
 
     for(auto p: primes){
         ll totpot = 0;
@@ -80,7 +78,7 @@ void solve(){
         
         ll maxpot = 1, maxpot_exp = 0;
         while(maxpot <= 2000000){ maxpot *= p; maxpot_exp++; } 
-        // vector<ll> multpot(sizee+1, 0); //la potencia es totpot-multpot
+
         ll ppot = maxpot;
         if(p !=2 && p != 5){
             if(maxpot_exp > totpot){
@@ -99,19 +97,13 @@ void solve(){
 
         cout << p << ' ' << pval << ' ' << ppot << endl;
         if(p == 2){
-            if(pval%128 == 0){
-
-            }
-            else{
+            if(pval%128 != 0){
                 flag = false;
             }
             continue;
         }
         if(p == 5){
-            if(pval%156125 == 0){
-
-            }
-            else{
+            if(pval%15625 != 0){
                 flag = false;
             }
             continue;
@@ -124,8 +116,12 @@ void solve(){
     if(flag) cout << "caso raro" << endl;
     else cout << "caso normal" << endl;
 
-    
-    
+    ld ans = 0;
+    for(auto f: frac){
+        ld add = (long double)f.fi/(long double)f.se;
+        ans += add;
+    }
+    cout << fixed << setprecision(10) << ans << endl;
     return;
 }
  
