@@ -1,67 +1,60 @@
 #include <bits/stdc++.h>
 using namespace std;
 template <typename T> using minheap = priority_queue<T, vector<T>, greater<T>>;
+using ll = long long;
+using vi = vector<int>;
+using vlli = vector<ll>;
+using vvi = vector<vi>;
+using vvlli = vector<vlli>;
+#define endl '\n'
 #define rep(i, a, b) for(int i=a; i<(b); ++i)
 #define all(x) begin(x), end(x)
 #define sz(x) (int) (x).size()
-#define endl '\n'
 #define pb push_back
-#define fi first
-#define se second
-typedef long double ld;
-typedef vector<int> vi;
-typedef pair<int, int> pii;
-typedef long long ll;
 int msb(long long int x) { return 63 - __builtin_clzll(x);}
 long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x)));}
-
-
 
 void solve(){
     int n; cin >> n;
     int a,b; cin >> a >> b;
-    // int e = (n*(n+1))/2 - a - b; 
-    set<int> awin, bwin;
-    for(int i=n; i>=0; i--){
-        if(a >= i){
-            awin.insert(i);
-            a-=i;
-        }
-        if(b>=i){
-            bwin.insert(i);
-            b -= i;
-        }
-    }
-
-    if(a>0 || b>0 || (int)(sz(awin)+sz(bwin)) > n){
+    int c = n-a-b;
+    //a mayores, b menores, c iguales
+    if(c < 0){
         cout << "NO" << endl;
         return;
     }
+    if(a+b > 0 && (a==0 || b==0)){
+        cout << "NO" << endl;
+        return;
+    }
+    cout << "YES" << endl;
 
-    vi alose, blose;
-    vi awinn, bwinn;
+    vi ac, bc;
 
-    rep(i, 1, n+1){
-        if(awin.find(i) == awin.end()) alose.push_back(i);
-        else awinn.push_back(i);
-        if(bwin.find(i) == bwin.end()) blose.push_back(i);
-        else bwinn.push_back(i);
+
+    rep(i, 1, c+1){
+        ac.push_back(i);
+        bc.push_back(i);
     }
 
-    sort(all(awinn));
-    sort(all(bwinn));
+    rep(i, c+1, c+1+b){
+        ac.push_back(i);
+        bc.push_back(i+a);
+    }
 
+    rep(i, c+1+b, c+1+a+b){
+        ac.push_back(i);
+        bc.push_back(i-b);
+    }
 
+    for(auto x: ac) cout << x << ' '; cout << endl;
+    for(auto x: bc) cout << x << ' '; cout << endl;
 
-
-
-    
 }
-
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
-    int t=1; 
+    ll t=1;
     cin >> t;
     while(t--) solve();
     return 0;
