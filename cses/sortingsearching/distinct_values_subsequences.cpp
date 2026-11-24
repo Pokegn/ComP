@@ -17,23 +17,24 @@ long long int pow2_lb(long long int x) { return (x == (x&-x) ? x : (2 << msb(x))
 #define MOD 1000000007
 
 void solve(){
-    map<ll, ll> dog;
     int n; cin >> n;
-    rep(i,0,n){
-        ll x; cin >> x;
-        dog[x]++;
-    }
-    ll ans = 1;
-    for(auto x:dog){
-        ans *= x.se+1;
+    vector<ll> a(n); rep(i,0,n) cin >> a[i];
+    map<ll, ll> occ;
+    rep(i,0,n) occ[a[i]]++;
+
+    ll ans = 0;
+    for(auto x: occ){
+        ans*=x.se+1;
         ans%=MOD;
     }
-    cout << ans-1 << endl;
-
+    cout << ans << endl;
 }
+
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
-    solve();
+    int t=1; 
+    // cin >> t;
+    while(t--) solve();
     return 0;
 }
