@@ -22,8 +22,6 @@ void solve(){
 
 int main(){
     cin.tie(0)->sync_with_stdio(false);
-    int t=1; 
-    cin >> t;
-    while(t--) solve();
+    solve();
     return 0;
 }
